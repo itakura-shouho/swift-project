@@ -11,22 +11,43 @@ import CoreData
 struct PostListView: View {
     @Environment(\.managedObjectContext) var viewContext
     
-    @FetchRequest(sortDescriptors: [])
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \TweetEntity.timestamp, ascending: true)])
     var tweets: FetchedResults<TweetEntity>
+    
+    let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+//        formatter.dateStyle = .short
+//        formatter.timeStyle = .short
+        formatter.dateFormat = "yyyy/M/dd HH:mm"
+        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        return formatter
+    }()
     
     var body: some View {
         List {
             ForEach(tweets) { tweet in
                 if tweet.textBody?.isEmpty == false {
-                    HStack {
-                        Text(tweet.textBody!)
-                        Spacer()
-                        Button(action: {
-                            deleteTweet(tweet)
-                        }) {
-                            Image(systemName: "trash")
+                    VStack{
+                        Text("\(tweet.timestamp!, formatter: dateFormatter)")
+                            .font(.caption)
+                            .frame(maxWidth: .infinity,alignment: .leading)
+                        
+                        HStack {
+                            Text(tweet.textBody!)
+                                .padding(.leading,10)
+                                .padding(.vertical,1)
+                            Spacer()
+                            
+                            Button(action: {
+                                deleteTweet(tweet)
+                            }) {
+                                Image(systemName: "trash")
+                            }
                         }
+                        
                     }
+     
                 }
             }
         }

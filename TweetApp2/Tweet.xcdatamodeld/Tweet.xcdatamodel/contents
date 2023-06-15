@@ -3,5 +3,6 @@
     <entity name="TweetEntity" representedClassName="TweetEntity" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="textBody" optional="YES" attributeType="String"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
 </model>
